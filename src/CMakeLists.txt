@@ -77,6 +77,16 @@ if(UNIX)
         target_link_libraries(discord-rpc PRIVATE "-framework AppKit, -mmacosx-version-min=10.10")
     endif (APPLE)
 
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" AND NOT APPLE AND ${BUILD_SHARED_LIBS})
+        target_compile_options(discord-rpc PRIVATE
+            -static-libstdc++
+            -static-libgcc
+            -Wl,--hash-style=both
+            -flto
+            -fno-jump-tables
+        )
+    endif()
+
     target_compile_options(discord-rpc PRIVATE
         -g
         -Wall
